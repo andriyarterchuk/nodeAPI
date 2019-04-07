@@ -19,6 +19,14 @@
   },
   "homepage": "https://github.com/andriyarterchuk/nodeAPI#readme",
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/knex": "^0.16.1",
+    "@types/koa": "^2.0.48",
+    "@types/koa-bodyparser": "^4.2.2",
+    "@types/koa-pino-logger": "^2.1.4",
+    "@types/koa-router": "^7.0.40",
+    "@types/pino": "^5.8.6",
+    "@types/uuid": "^3.4.4",
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",
@@ -26,7 +34,14 @@
     "typescript": "^3.4.1"
   },
   "dependencies": {
-    "express": "^4.16.4",
-    "redis": "^2.8.0"
+    "dotenv": "^7.0.0",
+    "knex": "^0.16.3",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-pino-logger": "^2.1.3",
+    "koa-router": "^7.4.0",
+    "pino": "^5.12.0",
+    "redis": "^2.8.0",
+    "uuid": "^3.3.2"
   }
 }
