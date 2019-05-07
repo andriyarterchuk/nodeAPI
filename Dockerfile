@@ -1,17 +1,10 @@
-FROM node:10-alpine
+FROM node:latest as node_ms
+COPY app /app
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+WORKDIR /app
+RUN npm install && npm run build
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-
-WORKDIR /home/node/app
-
-COPY package*.json ./
-
-USER node
-
-RUN npm install
-
-COPY --chown=node:node . .
-
-EXPOSE 8080
-
-CMD [ "node", "services/Hotel/index.ts" ]
+FROM nginx:latest as gateway
+COPY ./.docker/nginx.conf /etc/nginx/nginx.conf
