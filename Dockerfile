@@ -1,10 +1,13 @@
-FROM node:latest as node_ms
+FROM node:alpine as node_ms
+RUN mkdir -p /app
 COPY app /app
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
+COPY docker-entrypoint.sh /app/services/docker-entrypoint.sh
+RUN chmod +x /app/services/docker-entrypoint.sh
 WORKDIR /app
-RUN npm install && npm run build
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+RUN apk add --no-cache bash \ 
+  && npm install \
+   && npm run build
+ENTRYPOINT ["/app/services/docker-entrypoint.sh"]
 
 FROM nginx:latest as gateway
-COPY ./.docker/nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf

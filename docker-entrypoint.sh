@@ -1,2 +1,2 @@
 #!/bin/bash
-node $1/index.js
+node services/$1/index.js

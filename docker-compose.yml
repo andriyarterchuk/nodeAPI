@@ -3,15 +3,13 @@ version: "3.6"
 x-service: &base_service
   env_file: 
     - .env
-  build:
-      context: .
+  image: node_ms:latest
   networks:
     - app-network
 
 services:
   gateway:
-    build:
-      context: .
+    image: gateway:latest
     ports:
       - 8080:80
     networks:
@@ -20,27 +18,24 @@ services:
   hotel:    
     <<: *base_service
     ports:
-      # - ${hotel_port}:${hotel_port}
-      - 3000:3000
+      - ${hotel_port}:${hotel_port}
     command:
-      - /app/services/hotel
+      - hotel
 
   
   profile:    
     <<: *base_service
     ports:
-      # - ${hotel_port}:${hotel_port}
-      - 3001:3001
+      - ${profile_port}:${profile_port}
     command:
-      - /app/services/profile
+      - profile
   
   auth:    
     <<: *base_service
     ports:
-      # - ${hotel_port}:${hotel_port}
-      - 3002:3002
+      - ${auth_port}:${auth_port}
     command:
-      - /app/services/auth
+      - auth
 
 networks:
   app-network:
