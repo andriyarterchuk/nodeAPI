@@ -1,6 +1,7 @@
 version: "3.6"
 
 x-service: &base_service
+  restart: always
   env_file: 
     - .env
   image: node_ms:latest
@@ -36,6 +37,15 @@ services:
       - ${auth_port}:${auth_port}
     command:
       - auth
+
+  #  db:
+  #   image: mysql:latest
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: example
+  #     MYSQL_DATABASE: HOTEL  
+  #     MYSQL_USER: user  
+  #     MYSQL_PASSWORD: 1234
 
 networks:
   app-network:

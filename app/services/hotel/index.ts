@@ -1,10 +1,11 @@
-import Koa from "koa";
+import BaseService from '../../base/service';
+import getRouter from './router';
+import settings from '../../settings';
 
-const app = new Koa();
+const HotelService = new BaseService(settings, settings.hotel.name);
 
-app.use(async function(ctx) {
-  ctx.body = JSON.stringify([{ name: "hotel" }]);
-  ctx.status = 200;
-});
+HotelService.useMySQL(settings.hotel.db);
+HotelService.useBodyParser();
+HotelService.useRouter(getRouter);
+HotelService.listen();
 
-app.listen(3000, () => console.log("started"));
