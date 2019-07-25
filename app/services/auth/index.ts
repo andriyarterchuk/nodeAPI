@@ -1,10 +1,12 @@
-import Koa from "koa";
+import BaseService from '../../base/service';
+import getRouter from './router';
+import settings from '../../settings';
 
-const app = new Koa();
+const AuthService = new BaseService(settings, settings.auth.name);
 
-app.use(async function(ctx) {
-  ctx.body = JSON.stringify([{ name: "auth" }]);
-  ctx.status = 200;
-});
+AuthService.useMySQL(settings.auth.db);
+AuthService.useBodyParser();
+AuthService.useRouter(getRouter);
+AuthService.listen();
 
-app.listen(3003, () => console.log("started"));
+

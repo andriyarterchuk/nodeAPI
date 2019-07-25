@@ -7,12 +7,24 @@ const { parsed } = config({
 
 const {
   hotel_port,
+  auth_port
 }: any = { ...env, ...parsed };
 
 export default {
   hotel: {
     name: 'hotel',
     port: hotel_port,
+    db: {
+      connectionLimit: 10,
+      host: 'localhost',
+      user: 'root',
+      password: '12345678',
+      database: 'node_db'
+    }
+  },
+  auth: {
+    name: 'auth',
+    port: auth_port,
     db: {
       connectionLimit: 10,
       host: 'localhost',
