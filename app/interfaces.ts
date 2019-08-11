@@ -17,7 +17,7 @@ export interface NewHotel {
 }
 
 export interface HotelHandlers {
-  getAllHotels: () =>  Promise<RequestResponse>,
+  getAllHotels: () => Promise<RequestResponse>,
   getHotelById: (id: string) => Promise<RequestResponse>,
   createHotel: (params: NewHotel) => Promise<RequestResponse>
 }
@@ -30,6 +30,7 @@ export interface RequestResponse {
 export interface IDatabase {
   query: Function,
   close: Function,
+  connection: Connection
 }
 
 export interface DbSettings {
@@ -47,12 +48,13 @@ export interface ServiceSettings {
 }
 
 export interface Handlers {
-  db?: DBHandlers
+  db: DBHandlers,
+  settings: ServiceSettings
 }
 
 export interface DBHandlers {
-  mongo?: IDatabase
+  mongo: IDatabase
 }
 
 export type getRouter = (connection: any, router: Router) => Router;
-export type getHandlers = <T>(connection: Connection) => T;
+export type getHandlers = <T>(settings: Handlers) => T;
