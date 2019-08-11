@@ -10,7 +10,6 @@ export default class BaseService {
   // public settingsService: Handlers;
   public settingsService: any; //temp
   constructor(settings: any, name: string) {
-    this.settingsService = settings[name];
     this.name = name;
     this.settingsService = {
       settings: settings[name],
