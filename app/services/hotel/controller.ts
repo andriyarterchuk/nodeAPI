@@ -1,34 +1,31 @@
 import uuidv1 from 'uuid/v1';
+import { Connection } from "mysql";
+import { HotelHandlers, getHandlers, NewHotel, RequestResponse } from '../../interfaces';
 
-const getHandlers = (connection: any) => {
-  async function getAll(ctx: any) {
-    const results = await connection.query("SELECT * FROM hotels", null);
-
-    ctx.body = { results };
-    ctx.status = 200;
+// const getHandlers : getHandlers = <HotelHandlers>(connection: any): HotelHandlers => {
+const getHandlers = (connection: Connection): HotelHandlers => {
+  
+  async function getAllHotels(): Promise<RequestResponse> {
+    const result = await connection.query("SELECT * FROM hotels", null);
+    return { result, status: 200 };
   }
 
-  async function getById(ctx: any) {
-    const id = ctx.params.id;
+  async function getHotelById(id: string): Promise<RequestResponse> {
     const result = await connection.query(`SELECT * FROM hotels WHERE uuid = ?`, [id]);
-
-    ctx.body = result;
-    ctx.status = 200;
+    return { result, status: 200 };
   }
 
-  async function create(ctx: any) {
-    const { name, description, rating, coords } = ctx.request.body;
+  async function createHotel(params: NewHotel): Promise<RequestResponse> {
+    const { name, description, rating, coords } = params;
     const result = await connection.query(`INSERT INTO hotels VALUES (?, ?, ?, ?, ?)`, [uuidv1(), name, description, rating, coords]);
-
-    ctx.body = result;
-    ctx.status = 200;
+    return { result, status: 200 };
   }
 
   return {
-    getAll,
-    getById,
-    create
-  }
+    getAllHotels,
+    getHotelById,
+    createHotel
+  };
 }
 
 export default getHandlers;

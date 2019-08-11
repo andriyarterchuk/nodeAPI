@@ -2,30 +2,43 @@ import Koa from "koa";
 import Database from "../db";
 import bodyParser from 'koa-bodyparser';
 const koaRouter = require('koa-router')();
-import { DbConfig, getRouter } from '../interfaces'
+import { DbConfig, getRouter, ServiceSettings, Handlers } from '../interfaces'
 
 export default class BaseService {
   public name: string;
   public app: Koa;
-  public connection: any;
-  public settingsService: any;
+  public handlers: Handlers;
+  public settingsService: ServiceSettings;
   constructor(settings: any, name: string) {
     this.settingsService = settings[name];
     this.name = name;
+    this.handlers = {};
     this.app = new Koa();
   }
 
-  useMySQL(settings: DbConfig) {
-    this.connection = new Database(settings);
+  useMySQL(settings: DbConfig): BaseService {
+    this.handlers = {
+      ...this.handlers,
+      db: {
+        ...(
+          this.handlers && this.handlers.db && {
+            ...this.handlers.db
+          }),
+        mongo: new Database(settings)
+      }
+    }
+    return this;
   }
 
-  useBodyParser() {
+  useBodyParser(): BaseService {
     this.app.use(bodyParser());
+    return this;
   }
 
-  useRouter(getRouter: getRouter) {
-    const router = getRouter(this.connection, koaRouter);
+  useRouter(getRouter: getRouter): BaseService {
+    const router = getRouter(this.handlers, koaRouter);
     this.app.use(router.routes());
+    return this;
   }
 
   listen() {

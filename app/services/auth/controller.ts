@@ -1,12 +1,9 @@
 import uuidv1 from 'uuid/v1';
 
 const getHandlers = (connection: any) => {
-  async function getUserById(ctx: any) {
-    const id = ctx.params.id;
+  async function getUserById(id: number) {
     const result = await connection.query(`SELECT * FROM users WHERE uuid = ?`, [id]);
-
-    ctx.body = result;
-    ctx.status = 200;
+    return result;
   }
 
   async function create(ctx: any) {

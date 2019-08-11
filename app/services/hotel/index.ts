@@ -8,4 +8,3 @@ HotelService.useMySQL(settings.hotel.db);
 HotelService.useBodyParser();
 HotelService.useRouter(getRouter);
 HotelService.listen();
-
