@@ -2,31 +2,27 @@ import Koa from "koa";
 import Database from "../db";
 import bodyParser from 'koa-bodyparser';
 const koaRouter = require('koa-router')();
-import { DbConfig, getRouter, ServiceSettings, Handlers } from '../interfaces'
+import { DbConfig, getRouter, getHandlers, ServiceSettings, Handlers } from '../interfaces'
 
 export default class BaseService {
   public name: string;
   public app: Koa;
-  public handlers: Handlers;
-  public settingsService: ServiceSettings;
+  // public settingsService: Handlers;
+  public settingsService: any; //temp
   constructor(settings: any, name: string) {
     this.settingsService = settings[name];
     this.name = name;
-    this.handlers = {};
+    this.settingsService = {
+      settings: settings[name],
+      db: {
+        mongo: null
+      }
+    };
     this.app = new Koa();
   }
 
   useMySQL(settings: DbConfig): BaseService {
-    this.handlers = {
-      ...this.handlers,
-      db: {
-        ...(
-          this.handlers && this.handlers.db && {
-            ...this.handlers.db
-          }),
-        mongo: new Database(settings)
-      }
-    }
+    this.settingsService.db.mongo = new Database(settings);
     return this;
   }
 
@@ -35,13 +31,14 @@ export default class BaseService {
     return this;
   }
 
-  useRouter(getRouter: getRouter): BaseService {
-    const router = getRouter(this.handlers, koaRouter);
+  useRouter(controller: any, getRouter: getRouter): BaseService { //temp 'any'
+    const handlers = controller(this.settingsService);
+    const router = getRouter(handlers, koaRouter);
     this.app.use(router.routes());
     return this;
   }
 
   listen() {
-    this.app.listen(this.settingsService.port, () => console.log(`${this.name} started on port: ${this.settingsService.port}`));
+    this.app.listen(this.settingsService.settings.port, () => console.log(`${this.name} started on port: ${this.settingsService.settings.port}`));
   }
 }

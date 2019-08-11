@@ -1,10 +1,10 @@
 import uuidv1 from 'uuid/v1';
 import { Connection } from "mysql";
-import { HotelHandlers, getHandlers, NewHotel, RequestResponse } from '../../interfaces';
+import { HotelHandlers, getHandlers, NewHotel, RequestResponse, Handlers } from '../../interfaces';
 
 // const getHandlers : getHandlers = <HotelHandlers>(connection: any): HotelHandlers => {
-const getHandlers = (connection: Connection): HotelHandlers => {
-  
+const getHandlers = (settings: Handlers): HotelHandlers => {
+  const connection: Connection = settings.db.mongo.connection;
   async function getAllHotels(): Promise<RequestResponse> {
     const result = await connection.query("SELECT * FROM hotels", null);
     return { result, status: 200 };

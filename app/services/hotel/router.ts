@@ -1,10 +1,8 @@
-import controller from "./controller";
 import { getRouter } from '../../interfaces';
 import { RouterContext } from 'koa-router';
 import sendResponse from '../../base/response';
 
-const getRouter: getRouter = ({ db: { mongo: connection } }, router) => {
-  const { getAllHotels, getHotelById, createHotel } = controller(connection);
+const getRouter: getRouter = ({ getAllHotels, getHotelById, createHotel }, router) => {
   router.get('/', async (ctx: RouterContext) => {
     try {
       const result = await getAllHotels();
